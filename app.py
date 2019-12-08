@@ -90,8 +90,8 @@ def create_app(
 
         if rec_params == "sar":
             df = algorithm(db).get_sar_recommendations(id_list)
-#         elif rec_params == "lgbm":
-#             df = algorithm(db).get_lgbm_recommendations(id_list)
+        elif rec_params == "lgbm":
+            df = algorithm(db).get_lgbm_recommendations(id_list)
         else:
             raise SelectionError('Algorithm does not exist')
         return jsonify({"Movies": list(df['json'])})
@@ -134,7 +134,7 @@ def create_app(
     def onboarding():
         genres = request.args.get("genres").split('|')
         num_per_category = 10 // len(genres)
-        data = None 
+        data = None
         with open('data/movies_by_genre.json') as f:
             data = json.load(f)
 
@@ -162,4 +162,4 @@ def create_app(
 
 if __name__ == '__main__':
     application = create_app()
-    application.run(host='127.0.0.1', port=8080, debug=True)
+    application.run(host='0.0.0.0')
