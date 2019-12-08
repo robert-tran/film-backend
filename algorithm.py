@@ -28,7 +28,8 @@ class Algorithm:
 		return json_object
 
 	def receive_request(self, url, payload, headers):
-		return requests.request("POST", url, json=payload, headers=headers)
+		# return requests.request("POST", url, json=payload, headers=headers)
+		return requests.post(url=url, json=payload, headers=headers)
 
 	def get_sar_recommendations(self, id_list):
 		if len(id_list) < 1:
@@ -36,11 +37,13 @@ class Algorithm:
 
 		payload = {"ItemID": id_list}
 		response = self.receive_request(config.sar_url, payload, self.sar_headers)
+		print(response.text)
 
 		# We use this negative column error since this is what the ML endpoint returns
 		if response.json() == 'negative column index found':
 			raise LookupError('Invalid Movie ID')
 
+		print(response.json())
 		response = self.deserialize_genres(response.json())
 
 		df = pd.DataFrame.from_dict(response, orient='columns')

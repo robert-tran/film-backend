@@ -10,8 +10,7 @@ from error import *
 
 class Database:
     def __init__(self):
-        # cnxn = pyodbc.connect('DRIVER='+config.driver+';SERVER='+config.server+';PORT=1433;DATABASE='+config.database+';UID='+config.username+';PWD='+config.password+';Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;')
-        cnxn = pyodbc.connect('DRIVER='+config.driver+';SERVER='+config.server+';PORT=1433;DATABASE='+config.database+';UID='+config.username+';PWD='+config.password)
+        cnxn = pyodbc.connect('DRIVER='+config.driver+';SERVER='+config.server+';PORT=1433;DATABASE='+config.database+';UID='+config.username+';PWD='+config.password+';Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;')
         self.cursor = cnxn.cursor()
 
     def db_lookup(self, selection, condition, query):
@@ -33,7 +32,7 @@ class Database:
         return df
 
     """
-    Sends GET request to TMDB API for the first movie result from the query and returns 
+    Sends GET request to TMDB API for the first movie result from the query and returns
     the movie poster and description.
     """
 
@@ -57,10 +56,13 @@ class Database:
     """
 
     def movie_search(self, user_input, page=1):
+        headers = {
+            'api-key': config.api_key,
+        }
         try:
             user_input = urllib.parse.quote(user_input, safe='')
             url = config.search_url + user_input + "*&$count=true&$top=20&$skip=" + str((page - 1) * 2)
-            json_movies = requests.get(url)
+            json_movies = requests.get(url, headers=headers)
             movie_list = json.loads(json_movies.text)
         except:
             LookupError('Azure Search failed')
