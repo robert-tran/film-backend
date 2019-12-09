@@ -37,24 +37,22 @@ class Algorithm:
 
 		payload = {"ItemID": id_list}
 		response = self.receive_request(config.sar_url, payload, self.sar_headers)
-		print(response.text)
 
 		# We use this negative column error since this is what the ML endpoint returns
 		if response.json() == 'negative column index found':
 			raise LookupError('Invalid Movie ID')
 
-		print(response.json())
 		response = self.deserialize_genres(response.json())
 
 		df = pd.DataFrame.from_dict(response, orient='columns')
 
 		df = self.db.get_tmdb_info(df)
-		
+
 		# Remove year from title
 		df['Title'] = df['Title'].apply(lambda x: re.sub(r'\s[(]\d\d\d\d[)]$', '',x))
 
 		df['json'] = df.apply(lambda x: json.loads(x.to_json()), axis=1)
-		
+
 		return df
 
 	# def get_lgbm_recommendations(self, id_list):

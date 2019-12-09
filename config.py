@@ -16,4 +16,4 @@ api_key = 'B47D6998EBC4D8997CC9EC480E7E08C6'
 tmdb_key = 'd1ddc0e2dbd32aba1cf4cc30bdb8bb43'
 
 # Obtain from the "Setting up Azure Search" step
-search_url = 'https://search-for-app.search.windows.net/indexes/film-index/docs?api-version=2019-05-06&search='
+search_url = 'https://search-films.search.windows.net/indexes/movie-index/docs?api-version=2019-05-06&search='

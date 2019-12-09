@@ -10,8 +10,7 @@ from error import *
 
 class Database:
     def __init__(self):
-        cnxn = pyodbc.connect('DRIVER='+config.driver+';SERVER='+config.server+';PORT=1433;DATABASE='+config.database+';UID='+config.username+';PWD='+config.password+';Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;')
-        self.cursor = cnxn.cursor()
+        self.cursor = pyodbc.connect('DRIVER='+config.driver+';SERVER='+config.server+';PORT=1433;DATABASE='+config.database+';UID='+config.username+';PWD='+config.password).cursor()
 
     def db_lookup(self, selection, condition, query):
         baseQuery = "SELECT " + selection + " FROM MOVIES WHERE " + condition + " = ?"
@@ -20,7 +19,6 @@ class Database:
             result = self.cursor.fetchall()
             return result[0][0]
         except:
-            print("LOI")
             raise LookupError('Movie lookup failed')
 
     def get_tmdb_info(self, df):
